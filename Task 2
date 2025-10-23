@@ -3,7 +3,8 @@ using namespace std;
 
 int move_count = 0;
 
-void towerofhanoi(int disks, char start, char middle, char end) {
+// towerofhanoi with B fixed as the middle peg
+void towerofhanoi(int disks, char start, char end, char middle = 'B') {
     if (disks == 1) {
         cout << "Move disk 1 from " << start << " to " << middle << endl;
         move_count++;
@@ -12,21 +13,14 @@ void towerofhanoi(int disks, char start, char middle, char end) {
         return;
     }
 
-    towerofhanoi(disks - 1, start, end, middle);
-
-    
+    // Note: middle is always the same (middle)
+    towerofhanoi(disks - 1, start, end, middle);  // move n-1: start -> end via middle
     cout << "Move disk " << disks << " from " << start << " to " << middle << endl;
     move_count++;
-
-
-    towerofhanoi(disks - 1, end, start, middle);
-
-    
+    towerofhanoi(disks - 1, end, start, middle);  // move n-1: end -> start via middle
     cout << "Move disk " << disks << " from " << middle << " to " << end << endl;
     move_count++;
-
-
-    towerofhanoi(disks - 1, start, middle, end);
+    towerofhanoi(disks - 1, start, end, middle);  // move n-1: start -> end via middle
 }
 
 int main() {
@@ -35,7 +29,7 @@ int main() {
     cin >> disks;
 
     cout << "\nSteps to solve Restricted Tower of Hanoi:\n";
-    towerofhanoi(disks, 'A', 'B', 'C');
+    towerofhanoi(disks, 'A', 'C', 'B');  // explicitly pass middle 'B'
 
     cout << "\nTotal moves: " << move_count << endl;
     return 0;
