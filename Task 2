@@ -1,0 +1,42 @@
+#include <iostream>
+using namespace std;
+
+int move_count = 0;
+
+void towerofhanoi(int disks, char start, char middle, char end) {
+    if (disks == 1) {
+        cout << "Move disk 1 from " << start << " to " << middle << endl;
+        move_count++;
+        cout << "Move disk 1 from " << middle << " to " << end << endl;
+        move_count++;
+        return;
+    }
+
+    towerofhanoi(disks - 1, start, end, middle);
+
+    
+    cout << "Move disk " << disks << " from " << start << " to " << middle << endl;
+    move_count++;
+
+
+    towerofhanoi(disks - 1, end, start, middle);
+
+    
+    cout << "Move disk " << disks << " from " << middle << " to " << end << endl;
+    move_count++;
+
+
+    towerofhanoi(disks - 1, start, middle, end);
+}
+
+int main() {
+    int disks;
+    cout << "Enter number of disks: ";
+    cin >> disks;
+
+    cout << "\nSteps to solve Restricted Tower of Hanoi:\n";
+    towerofhanoi(disks, 'A', 'B', 'C');
+
+    cout << "\nTotal moves: " << move_count << endl;
+    return 0;
+}
