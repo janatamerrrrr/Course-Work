@@ -1,0 +1,172 @@
+#include <iostream>
+#include <iomanip>
+#include <cstdlib>
+#include <ctime>
+#include <algorithm>
+using namespace std;
+
+//bubble sort
+
+int bubble_sort_count(int arr[], int n) {
+    int comparisons = 0;
+    for (int i = 0; i < n - 1; i++) {
+        bool swapped = false;
+        for (int j = 0; j < n - i - 1; j++) {
+            comparisons++;
+            if (arr[j] > arr[j + 1]) {
+                swap(arr[j], arr[j + 1]);
+                swapped = true;
+            }
+        }
+        if (!swapped) break;
+    }
+    return comparisons;
+}
+
+//selection sort
+
+int selection_sort_count(int arr[], int n) {
+    int comparisons = 0;
+    for (int i = 0; i < n - 1; i++) {
+        int min_idx = i;
+        for (int j = i + 1; j < n; j++) {
+            comparisons++;
+            if (arr[j] < arr[min_idx])
+                min_idx = j;
+        }
+        if (min_idx != i)
+            swap(arr[min_idx], arr[i]);
+    }
+    return comparisons;
+}
+
+//insertion sort
+
+int insertion_sort_count(int arr[], int n) {
+    int comparisons = 0;
+    for (int i = 1; i < n; i++) {
+        int key = arr[i];
+        int j = i - 1;
+        while (j >= 0) {
+            comparisons++;
+            if (arr[j] > key)
+                arr[j + 1] = arr[j];
+            else
+                break;
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+    return comparisons;
+}
+
+//helper
+
+void generate_random_array(int arr[], int n) {
+    for (int i = 0; i < n; i++)
+        arr[i] = rand() % 100;
+}
+
+void generate_sorted_array(int arr[], int n) {
+    for (int i = 0; i < n; i++)
+        arr[i] = i;
+}
+
+void generate_reverse_sorted_array(int arr[], int n) {
+    for (int i = 0; i < n; i++)
+        arr[i] = n - i;
+}
+
+
+//Tests
+
+void test_comparisons() {
+    srand(time(0));
+
+    for (int n = 1; n <= 30; n++) {
+        int arr1[100], arr2[100], arr3[100];
+        clock_t start, end;
+
+        cout << "\nArray Size: " << n << "\n";
+
+        //Random
+        generate_random_array(arr1, n);
+        copy(arr1, arr1 + n, arr2);
+        copy(arr1, arr1 + n, arr3);
+
+        start = clock();
+        int bcomp = bubble_sort_count(arr1, n);
+        end = clock();
+        double btime = double(end - start) / CLOCKS_PER_SEC;
+
+        start = clock();
+        int scomp = selection_sort_count(arr2, n);
+        end = clock();
+        double stime = double(end - start) / CLOCKS_PER_SEC;
+
+        start = clock();
+        int icomp = insertion_sort_count(arr3, n);
+        end = clock();
+        double itime = double(end - start) / CLOCKS_PER_SEC;
+
+        cout << "Random Array\n";
+        cout << "Bubble Sort Comparisons: " << bcomp << "  Time: " << fixed << setprecision(6) << btime << "s\n";
+        cout << "Selection Sort Comparisons: " << scomp << "  Time: " << fixed << setprecision(6) << stime << "s\n";
+        cout << "Insertion Sort Comparisons: " << icomp << "  Time: " << fixed << setprecision(6) << itime << "s\n\n";
+
+        //Sorted
+        generate_sorted_array(arr1, n);
+        copy(arr1, arr1 + n, arr2);
+        copy(arr1, arr1 + n, arr3);
+
+        start = clock();
+        bcomp = bubble_sort_count(arr1, n);
+        end = clock();
+        btime = double(end - start) / CLOCKS_PER_SEC;
+
+        start = clock();
+        scomp = selection_sort_count(arr2, n);
+        end = clock();
+        stime = double(end - start) / CLOCKS_PER_SEC;
+
+        start = clock();
+        icomp = insertion_sort_count(arr3, n);
+        end = clock();
+        itime = double(end - start) / CLOCKS_PER_SEC;
+
+        cout << "Sorted Array\n";
+        cout << "Bubble Sort Comparisons: " << bcomp << "  Time: " << fixed << setprecision(6) << btime << "s\n";
+        cout << "Selection Sort Comparisons: " << scomp << "  Time: " << fixed << setprecision(6) << stime << "s\n";
+        cout << "Insertion Sort Comparisons: " << icomp << "  Time: " << fixed << setprecision(6) << itime << "s\n\n";
+
+        //Reverse sorted
+        generate_reverse_sorted_array(arr1, n);
+        copy(arr1, arr1 + n, arr2);
+        copy(arr1, arr1 + n, arr3);
+
+        start = clock();
+        bcomp = bubble_sort_count(arr1, n);
+        end = clock();
+        btime = double(end - start) / CLOCKS_PER_SEC;
+
+        start = clock();
+        scomp = selection_sort_count(arr2, n);
+        end = clock();
+        stime = double(end - start) / CLOCKS_PER_SEC;
+
+        start = clock();
+        icomp = insertion_sort_count(arr3, n);
+        end = clock();
+        itime = double(end - start) / CLOCKS_PER_SEC;
+
+        cout << "Reverse Sorted Array\n";
+        cout << "Bubble Sort Comparisons: " << bcomp << "  Time: " << fixed << setprecision(6) << btime << "s\n";
+        cout << "Selection Sort Comparisons: " << scomp << "  Time: " << fixed << setprecision(6) << stime << "s\n";
+        cout << "Insertion Sort Comparisons: " << icomp << "  Time: " << fixed << setprecision(6) << itime << "s\n";
+    }
+}
+
+int main() {
+    test_comparisons();
+    return 0;
+}
