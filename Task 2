@@ -14,14 +14,18 @@ void towerofhanoi(int disks, char start, char end, char middle = 'B') {
     }
 
 
-    towerofhanoi(disks - 1, start, end, middle);  // move n-1: start -> end via middle
+    towerofhanoi(disks - 1, start, end, middle); 
+    
     cout << "Move disk " << disks << " from " << start << " to " << middle << endl;
     move_count++;
-    towerofhanoi(disks - 1, end, start, middle);  // move n-1: end -> start via middle
+    
+    towerofhanoi(disks - 1, end, start, middle);  
+    
     cout << "Move disk " << disks << " from " << middle << " to " << end << endl;
     move_count++;
-    towerofhanoi(disks - 1, start, end, middle);  // move n-1: start -> end via middle
-}
+    
+    towerofhanoi(disks - 1, start, end, middle); 
+    
 
 int main() {
     int disks;
@@ -29,7 +33,7 @@ int main() {
     cin >> disks;
 
     cout << "\nSteps to solve Restricted Tower of Hanoi:\n";
-    towerofhanoi(disks, 'A', 'C', 'B');  // explicitly pass middle 'B'
+    towerofhanoi(disks, 'A', 'C', 'B'); 
 
     cout << "\nTotal moves: " << move_count << endl;
     return 0;
