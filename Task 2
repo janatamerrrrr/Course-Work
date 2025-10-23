@@ -3,7 +3,7 @@ using namespace std;
 
 int move_count = 0;
 
-// towerofhanoi with B fixed as the middle peg
+
 void towerofhanoi(int disks, char start, char end, char middle = 'B') {
     if (disks == 1) {
         cout << "Move disk 1 from " << start << " to " << middle << endl;
@@ -13,7 +13,7 @@ void towerofhanoi(int disks, char start, char end, char middle = 'B') {
         return;
     }
 
-    // Note: middle is always the same (middle)
+
     towerofhanoi(disks - 1, start, end, middle);  // move n-1: start -> end via middle
     cout << "Move disk " << disks << " from " << start << " to " << middle << endl;
     move_count++;
