@@ -34,3 +34,5 @@ In this version:
 
 This restriction changes the classic solution, requiring more moves and a slightly different recursive approach.
 
+Task (4): Anagroms checker:
+This C++ program checks if two words are anagrams. It sorts the letters of each word using bubble sort and then compares them. If the sorted words are the same, they are anagrams; otherwise, they are not.
