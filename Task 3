@@ -1,1 +1,126 @@
+#include <iostream>
+#include <fstream> //this is to read the file
+#include <string>
+using namespace std;
+
+struct Node { //this is the node creation when the word is taken the left and right children are empty.
+    string word;
+    Node* Left;
+    Node* Right;
+    int height;
+    
+    Node(string w) {
+        word = w;
+        Left=Right=nullptr;
+        height=1;
+    }
+};
+
+int nodeheight(Node* n){//this gets the height of the node if n = nullptr so its empty we return zero, if not we get the heighjt
+    if(n==nullptr){
+        return 0;
+    }else{
+        return n->height;
+    }
+}
+ int nodebalance(Node* n){//here is where we get the balance by subtracting the height of the left side with the right side
+     if(n==nullptr){
+         return 0;
+     }else{
+         return nodeheight(n->Left)-nodeheight(n->Right);
+     }
+ }
+ Node* rotateRight(Node* y){//what happend here is when the tree is unbalnced which is root is y and the left child is x and the right child of x is J we need to rotate so we changes the pointers. then we get the new height.
+     Node* x=y->Left;
+     Node* J=x->Right;
+
+     x->Right=y;
+     y->Left=J;
+     
+    y->height= max(nodeheight(y->Left), nodeheight(y->Right)) + 1;
+    x->height= max(nodeheight(x->Left),nodeheight(x->Right)) + 1;
+
+    return x;
+ }
+ 
+ Node* rotateLeft(Node* x) {//same here we if tree is unbalnced where root x where the right child is y and y's left child is j, we chmage the pointers to make it balance, and get the height.
+    Node* y=x->Right;
+    Node* J=y->Left;
+
+    y->Left=x;
+    x->Right=J;
+
+    x->height = max(nodeheight(x->Left), nodeheight(x->Right)) + 1;
+    y->height = max(nodeheight(y->Left), nodeheight(y->Right)) + 1;
+
+    return y;
+}
+
+Node* insert(Node* root, string word) {//we place the new node as a children to the root node, and w ecompare it to the root node so we know if it goes right or left, right if larger, left if smaller
+    if (root == nullptr)
+        return new Node(word);
+
+    if (word < root->word){
+        root->Left=insert(root->Left, word);
+    }else if (word > root->word){
+        root->Right=insert(root->Right, word);
+    }else{
+        return root;
+    }
+     //we update the height , we check the balance and if not balance we do the roation needed
+    root->height= 1 + max(nodeheight(root->Left), nodeheight(root->Right));
+
+    int balance=nodebalance(root);
+
+    if (balance > 1 && word < root->Left->word)
+        return rotateRight(root);
+    if (balance < -1 && word > root->Right->word)
+        return rotateLeft(root);
+    if (balance > 1 && word > root->Left->word) {
+        root->Left = rotateLeft(root->Left);
+        return rotateRight(root);
+    }
+    if (balance < -1 && word < root->Right->word) {
+        root->Right = rotateRight(root->Right);
+        return rotateLeft(root);
+    }
+
+    return root;
+}
+
+void findPrefix(Node* root, string prefix) {//point to the current node, the string prefix is wgat the user typed
+    if (root == nullptr){
+        return;// base case if the pointer points to nothing stop
+    }
+//first we check the left subtree, we take the begging of the word and take the first few letters that are the same lenghth as the the prefix and compare , if they ,atch we print, then we check the right substree
+   findPrefix(root->Left, prefix);
+   
+    if (root->word.substr(0, prefix.length()) == prefix) {
+        cout << root->word << endl;
+    }
+    findPrefix(root->Right, prefix);
+}
+int main() {// here we crreate and empty avl tree, opens the file and reads it and inserts each word to the tree.
+    Node* root=nullptr;
+    string filename= "dictionary.txt";
+    ifstream file(filename);
+
+    string word;
+    while (file >> word) {
+        root = insert(root, word);
+    }
+      
+     //loop to ask the user to enter a prefix how many times they want until they want to end it, calls fumction findprefix to get the results.
+    string input = "";
+    while (true) {
+        cout<< "\nEnter prefix or End: ";
+        cin>>input;
+        
+        if (input=="End") break;
+
+        cout << "\nResults:\n";
+        findPrefix(root, input);
+    }
+    return 0;
+}
 
