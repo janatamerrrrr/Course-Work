@@ -88,17 +88,60 @@ Node* insert(Node* root, string word) {//we place the new node as a children to 
     return root;
 }
 
-void findPrefix(Node* root, string prefix) {//point to the current node, the string prefix is wgat the user typed
-    if (root == nullptr){
-        return;// base case if the pointer points to nothing stop
+Node* findPrefixStart(Node* root, const string& prefix) {
+    Node* current = root;
+    Node* result = nullptr;
+
+    while (current != nullptr) {
+        string w = current->word;
+
+        // if current word starts with prefix → good candidate
+        if (w.substr(0, prefix.length()) == prefix) {
+            result = current;
+            // keep going left to find smaller matching words
+            current = current->Left;
+        }
+        // if prefix would be alphabetically before the word → go left
+        else if (prefix < w) {
+            current = current->Left;
+        }
+        // otherwise go right
+        else {
+            current = current->Right;
+        }
     }
-//first we check the left subtree, we take the begging of the word and take the first few letters that are the same lenghth as the the prefix and compare , if they ,atch we print, then we check the right substree
-   findPrefix(root->Left, prefix);
-   
-    if (root->word.substr(0, prefix.length()) == prefix) {
+
+    return result;
+}
+void collectMatches(Node* root, const string& prefix) {
+    if (root == nullptr) return;
+
+    if (root->word < prefix) {
+        collectMatches(root->Right, prefix);
+        return;
+    }
+
+    if (root->word.substr(0, prefix.length()) != prefix &&
+        root->word.compare(0, prefix.length(), prefix) > 0) {
+        collectMatches(root->Left, prefix);
+        return;
+    }
+
+    collectMatches(root->Left, prefix);
+    if (root->word.substr(0, prefix.length()) == prefix)
         cout << root->word << endl;
-    }
-    findPrefix(root->Right, prefix);
+
+    collectMatches(root->Right, prefix);
+}
+
+//
+// FINAL CHALLENGE FUNCTION
+//
+void findPrefix(Node* root, const string& prefix) {
+    Node* start = findPrefixStart(root, prefix);
+    if (start == nullptr) return;
+
+    collectMatches(start, prefix);
 }
 int main() {// here we crreate and empty avl tree, opens the file and reads it and inserts each word to the tree.
     Node* root=nullptr;
