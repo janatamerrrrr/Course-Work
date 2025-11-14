@@ -158,3 +158,4 @@ int main() {// here we crreate and empty avl tree, opens the file and reads it a
     }
     return 0;
 }
+
