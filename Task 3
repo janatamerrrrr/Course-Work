@@ -95,17 +95,13 @@ Node* findPrefixStart(Node* root, const string& prefix) {
     while (current != nullptr) {
         string w = current->word;
 
-        // if current word starts with prefix → good candidate
         if (w.substr(0, prefix.length()) == prefix) {
             result = current;
-            // keep going left to find smaller matching words
             current = current->Left;
         }
-        // if prefix would be alphabetically before the word → go left
         else if (prefix < w) {
             current = current->Left;
         }
-        // otherwise go right
         else {
             current = current->Right;
         }
@@ -134,9 +130,6 @@ void collectMatches(Node* root, const string& prefix) {
     collectMatches(root->Right, prefix);
 }
 
-//
-// FINAL CHALLENGE FUNCTION
-//
 void findPrefix(Node* root, const string& prefix) {
     Node* start = findPrefixStart(root, prefix);
     if (start == nullptr) return;
