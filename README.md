@@ -34,5 +34,9 @@ In this version:
 
 This restriction changes the classic solution, requiring more moves and a slightly different recursive approach.
 
+Task(3): AVL tree Autocomplete:
+This program implements an AVL tree to store a dictionary of words. An AVL tree is a self-balancing binary search tree where the balance factor (height of left subtree minus height of right subtree) of every node is maintained between -1 and 1. When a new word is inserted, the tree may perform rotations (left or right) to stay balanced. The program allows the user to type a prefix, then efficiently finds and displays all dictionary words that start with that prefix.
+
+
 Task (4): Anagroms checker:
 This C++ program checks if two words are anagrams. It sorts the letters of each word using bubble sort and then compares them. If the sorted words are the same, they are anagrams; otherwise, they are not.
