@@ -88,13 +88,12 @@ Node* insert(Node* root, string word) {//we place the new node as a children to 
     return root;
 }
 
-Node* findPrefixStart(Node* root, const string& prefix) {
+Node* findPrefixStart(Node* root, const string& prefix) { // here we find the prefix and adding the challenge part, we check if the currebt word starts with the prefix, , if yes save it in the result, if the prefix is smaller go left  otherwise go right, 
     Node* current = root;
     Node* result = nullptr;
 
     while (current != nullptr) {
         string w = current->word;
-
         if (w.substr(0, prefix.length()) == prefix) {
             result = current;
             current = current->Left;
@@ -109,7 +108,7 @@ Node* findPrefixStart(Node* root, const string& prefix) {
 
     return result;
 }
-void collectMatches(Node* root, const string& prefix) {
+void collectMatches(Node* root, const string& prefix) {//here instead if searched the whole tree, it skips subtrees is its either way bigger or smaller than the prefix(in order traverse)
     if (root == nullptr) return;
 
     if (root->word < prefix) {
@@ -159,4 +158,3 @@ int main() {// here we crreate and empty avl tree, opens the file and reads it a
     }
     return 0;
 }
-
