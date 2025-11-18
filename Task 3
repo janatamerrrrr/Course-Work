@@ -87,42 +87,24 @@ Node* insert(Node* root, string word) {//we place the new node as a children to 
 
     return root;
 }
-Node* findPrefixStart(Node* root, const string& prefix) {
-    Node* current = root;
-    Node* result = nullptr;
-
-    while (current != nullptr) {
-        string w = current->word;
-        if (w.substr(0, prefix.length()) == prefix) {
-            result = current;
-            current = current->Left;
-        } else if (prefix < w) {
-            current = current->Left;
-        } else {
-            current = current->Right;
-        }
-    }
-
-    return result;
-}
 
 //here we collect all words that match the prefix, only traversing necessary subtrees
-void collectMatches(Node* root, const string& prefix) {
+void FIND_ALL_WITH_PREFIX(Node* root, const string& prefix) {
     if (!root) return;
 
     if (root->word.substr(0, prefix.length()) == prefix)
         cout << root->word << endl;
 
     if (root->word >= prefix)
-        collectMatches(root->Left, prefix);
+        FIND_ALL_WITH_PREFIX(root->Left, prefix);
 
     if (root->word <= prefix || root->word.substr(0, prefix.length()) == prefix)
-        collectMatches(root->Right, prefix);
+        FIND_ALL_WITH_PREFIX(root->Right, prefix);
 }
 
 void findPrefix(Node* root, const string& prefix) {
     if (root == nullptr) return;
-    collectMatches(root, prefix);
+    FIND_ALL_WITH_PREFIX(root, prefix);
 }
 
 int main() {// here we crreate and empty avl tree, opens the file and reads it and inserts each word to the tree.
