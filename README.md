@@ -40,3 +40,7 @@ This program implements an AVL tree to store a dictionary of words. An AVL tree 
 
 Task (4): Anagroms checker:
 This C++ program checks if two words are anagrams. It sorts the letters of each word using bubble sort and then compares them. If the sorted words are the same, they are anagrams; otherwise, they are not.
+
+Task(5): Alternating disks:
+This C++ program sorts 2n disks (n dark D, n light L) from an alternating sequence (D L D L ...) to all light disks on the left and all dark disks on the right (L L ... D D).
+It uses a modified bubble sort: swap any adjacent D and L where D is left of L. Each swap moves L left and D right. The program prints the initial and sorted sequences and the total number of moves.
