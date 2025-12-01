@@ -1,1 +1,43 @@
+#include <iostream>
+using namespace std;
+
+int bubble_sort(string &word) {
+    int n = word.length();
+    int moves = 0;
+
+    for (int i = 0; i < n - 1; i++) {
+        bool swapped = false;
+
+        for (int j = 0; j < n - i - 1; j++) {
+            if (word[j] == 'D' && word[j + 1] == 'L') {
+                swap(word[j], word[j + 1]);
+                swapped = true;
+                moves++;
+            }
+        }
+
+        if (!swapped)
+            break;
+    }
+
+    return moves;
+}
+
+int main() {
+    int n;
+    cout << "Enter n: ";
+    cin >> n;
+
+    string disks = "";
+    for (int i = 0; i < n; i++) {
+        disks += "DL";
+    }
+
+    cout << "Before sorting: " << disks << endl;
+
+    int moves = bubble_sort(disks);
+
+    cout << "After sorting : " << disks << endl;
+    cout << "Number of moves: " << moves << endl;
+}
 
