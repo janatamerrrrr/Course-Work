@@ -1,0 +1,96 @@
+//o(n)
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+int main() {
+    srand(time(0));
+
+    int n;
+    cout << "Enter number of coins (n > 2): ";
+    cin >> n;
+
+    if (n <= 2) {
+        cout << "error enter another number" << endl;
+        return 1;
+    }
+
+    int coins[100];
+
+    for (int i = 0; i < n; i++) {
+        coins[i] = 7;   
+    }
+
+    int i_fakecoin = rand() % n;   
+    bool isitheavy = rand() % 2;   
+
+    if (isitheavy) {
+        coins[i_fakecoin] = coins[i_fakecoin] + 1;
+    } else {
+        coins[i_fakecoin] = coins[i_fakecoin] - 1;  
+    }
+
+    for (int i = 0; i < n; i++) {
+        if (coins[i] != 7) {
+            cout << "Fake coin is at index " << i << " and it is ";
+            if (coins[i] < 7) {
+                cout << "lighter" << endl;
+            } else {
+                cout << "heavier" << endl;
+            }
+            break;
+        }
+    }
+
+    return 0;
+}
+
+//o(1)
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+int main() {
+    srand(time(0));
+
+    int A = 7, B = 7, C = 7;
+
+    int fake = rand() % 3;
+    bool isitheavy = rand() % 2;
+
+    if (fake == 0) {
+        if (isitheavy)
+            A = A + 1;
+        else
+            A = A - 1;
+    }
+    if (fake == 1) {
+        if (isitheavy)
+            B = B + 1;
+        else
+            B = B - 1;
+    }
+    if (fake == 2) {
+        if (isitheavy)
+            C = C + 1;
+        else
+            C = C - 1;
+    }
+    if (A == B) {
+        cout << "Fake coin is C and it is ";
+        if (C < A) cout << "lighter\n";
+        else cout << "heavier\n";
+    } else if (A == C) {
+        cout << "Fake coin is B and it is ";
+        if (B < A) cout << "lighter\n";
+        else cout << "heavier\n";
+    } else {
+        cout << "Fake coin is A and it is ";
+        if (A < B) cout << "lighter\n";
+        else cout << "heavier\n";
+    }
+
+    return 0;
+}
