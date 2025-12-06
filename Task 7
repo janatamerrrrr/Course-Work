@@ -1,0 +1,127 @@
+//greedy
+
+#include <iostream>
+using namespace std;
+
+struct Item {
+    string name;
+    int price;
+};
+
+void bubbleSortByPrice(Item items[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        bool swapped = false;
+        for (int j = 0; j < n - i - 1; j++) {
+            if (items[j].price > items[j + 1].price) {
+                swap(items[j], items[j + 1]);
+                swapped = true;
+            }
+        }
+        if (swapped == false)
+            break;
+    }
+}
+
+
+void greedyKnapsack(Item items[], int n, int budget) {
+    bubbleSortByPrice(items, n);
+
+    cout << "\nitems to buy within your budget:\n";
+
+    int spent = 0;
+    for (int i = 0; i < n; i++) {
+        if (spent + items[i].price <= budget) {
+            cout << "- " << items[i].name << " (Price: " << items[i].price << ")\n";
+            spent += items[i].price;
+        }
+    }
+
+    cout << "\nTotal spent: " << spent << endl;
+    cout << "Remaining budget: " << budget - spent << endl;
+}
+
+int main() {
+    int n, budget;
+
+    cout << "Enter budget: ";
+    cin >> budget;
+
+    cout << "Enter the number of items: ";
+    cin >> n;
+
+    Item items[n];
+
+    for (int i = 0; i < n; i++) {
+        cout << "\nEnter name of item " << i + 1 << ": ";
+        cin >> items[i].name;
+
+        cout << "Enter price of " << items[i].name << ": ";
+        cin >> items[i].price;
+    }
+
+    greedyKnapsack(items, n, budget);
+
+    return 0;
+}
+
+//dp
+#include <iostream>
+using namespace std;
+
+int knapsack(int W, int prices[], string names[], int n) {
+    int dp[n + 1][W + 1];
+
+    for (int i = 0; i <= n; i++) {
+        for (int w = 0; w <= W; w++) {
+            if (i == 0 || w == 0)
+                dp[i][w] = 0;
+            else if (prices[i - 1] <= w)
+                dp[i][w] = max(1 + dp[i - 1][w - prices[i - 1]], dp[i - 1][w]);
+            else
+                dp[i][w] = dp[i - 1][w];
+        }
+    }
+
+    int w = W;
+    int totalSpent = 0;
+
+    cout << "\nitems to buy within your budget:\n";
+
+    for (int i = n; i > 0; i--) {
+        if (dp[i][w] != dp[i - 1][w]) {
+            cout << "- " << names[i - 1] << " (Price: " << prices[i - 1] << ")\n";
+            totalSpent += prices[i - 1];
+            w -= prices[i - 1];
+        }
+    }
+
+    cout << "\nTotal spent: " << totalSpent << endl;
+    cout << "Remaining budget: " << (W - totalSpent) << endl;
+
+    return dp[n][W];
+}
+
+int main() {
+    int n, budget;
+
+    cout << "Enter budget: ";
+    cin >> budget;
+
+    cout << "Enter number of items: ";
+    cin >> n;
+
+    int prices[n];
+    string names[n];
+
+    for (int i = 0; i < n; i++) {
+        cout << "\nEnter item " << i + 1 << " name: ";
+        cin >> names[i];
+        cout << "Enter price of " << names[i] << ": ";
+        cin >> prices[i];
+    }
+    
+    int maxItems = knapsack(budget, prices, names, n);
+
+    return 0;
+}
+
