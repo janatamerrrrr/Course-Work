@@ -1,0 +1,140 @@
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+void getInput(int &numStacks, int &stackHeight) {
+    cout << "Enter number of stacks: ";
+    cin >> numStacks;
+
+    cout << "Enter number of balls per stack: ";
+    cin >> stackHeight;
+}
+
+void fillStacks(vector<vector<string>> &stacks, int numStacks, int stackHeight) {
+    stacks.resize(numStacks);
+
+    cout << "\nEnter colors for each stack (top to bottom, space separated):\n";
+    cout << "Type 'empty' for an empty stack.\n";
+    cout << "(example: red blue green or empty for empty stack)\n\n";
+
+    for (int i = 0; i < numStacks; i++) {
+        cout << "Stack " << i << ": ";
+        for (int j = 0; j < stackHeight; j++) {
+            string color;
+            cin >> color;
+            if (color != "empty") 
+                stacks[i].push_back(color);
+        }
+    }
+}
+
+void showStacks(const vector<vector<string>> &stacks) {
+    cout << "\nCurrent stacks:\n";
+    for (int i = 0; i < stacks.size(); i++) {
+        cout << "Stack " << i << ": ";
+        for (int j = 0; j < stacks[i].size(); j++) {
+            cout << stacks[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+
+bool solved(const vector<vector<string>> &stacks, int stackHeight) {
+    for (int i = 0; i < stacks.size(); i++) {                
+        if (stacks[i].empty()) continue;      
+        
+        if (stacks[i].size() != stackHeight) return false;  
+
+        string color = stacks[i][0];         
+        
+        for (int j = 0; j < stacks[i].size(); j++) { 
+            
+            if (stacks[i][j] != color) return false;       
+        }
+    }
+    return true;                                            
+}
+
+string stringState(const vector<vector<string>> &stacks) {
+    string s = "";
+
+    for (int i = 0; i < stacks.size(); i++) {         
+        s += "|";                                       
+        for (int j = 0; j < stacks[i].size(); j++) {     
+            s += stacks[i][j];                           
+            if (j < stacks[i].size() - 1) s += ",";      
+        }
+    }
+
+    return s;
+}
+
+bool dfs(vector<vector<string>> &stacks, int stackHeight, vector<string> &visited) {
+    if (solved(stacks, stackHeight)) {
+        cout << "\nSolved.\n";
+        showStacks(stacks);
+        return true;
+    }
+
+    string state = stringState(stacks);
+    bool alreadyVisited = false;
+
+    for (int i = 0; i < visited.size(); i++) {
+        if (visited[i] == state) {
+           alreadyVisited = true;
+           break;
+       }
+    }
+
+    if (alreadyVisited) return false;
+    
+    visited.push_back(state);
+
+    int n = stacks.size();
+    for (int i = 0; i < n; i++) {
+        if (stacks[i].empty()) continue;
+
+        for (int j = 0; j < n; j++) {
+            if (i == j) continue;
+
+            if (stacks[j].size() < stackHeight &&
+                (stacks[j].empty() || stacks[j].back() == stacks[i].back())) {
+
+                string ball = stacks[i].back();
+                stacks[i].pop_back();
+                stacks[j].push_back(ball);
+
+                showStacks(stacks);
+
+                if (dfs(stacks, stackHeight, visited))
+                    return true;
+
+                stacks[j].pop_back();
+                stacks[i].push_back(ball);
+            }
+        }
+    }
+
+    return false;
+}
+
+int main() {
+    int numStacks, stackHeight;
+
+    getInput(numStacks, stackHeight);
+
+    vector<vector<string>> stacks;
+    fillStacks(stacks, numStacks, stackHeight);
+
+    showStacks(stacks);
+
+    vector<string> visited;
+    cout << "\nSolving....\n";
+    bool solvedPuzzle = dfs(stacks, stackHeight, visited);
+
+    if (!solvedPuzzle)
+        cout << "\nNo solution found.\n";
+
+    return 0;
+}
